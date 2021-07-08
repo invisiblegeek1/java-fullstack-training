@@ -1,5 +1,7 @@
 package com.revature.project0.entity;
 
+import java.sql.Timestamp;
+
 /*
  * Table: transactions
 Columns:
@@ -21,15 +23,19 @@ public class Transaction {
 	private int transactionAmount;
 	private int debitedAccNo;
 	private int creditedAccNo;
+	private Timestamp timeStamp;
 	
 	// constructor for Transaction
 	
-	public  Transaction(int transcationid, int transactionAmount, int debitedAccNo, int creditedAccNo) {
+	
+
+	public  Transaction() {
 		super();
 		this.transcationid = transcationid;
 		this.transactionAmount = transactionAmount;
 		this.debitedAccNo = debitedAccNo;
 		this.creditedAccNo = creditedAccNo;
+		this.timeStamp=timeStamp;
 	}
 
 	public int getTranscationid() {
@@ -63,12 +69,26 @@ public class Transaction {
 	public void setCreditedAccNo(int creditedAccNo) {
 		this.creditedAccNo = creditedAccNo;
 	}
+	
+	public Timestamp getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(Timestamp timeStemp) {
+		this.timeStamp = timeStemp;
+	}
 
 	@Override
 	public String toString() {
-		return "TransactionDetails [transcationid=" + transcationid + ", transactionAmount=" + transactionAmount
-				+ ", debitedAccNo=" + debitedAccNo + ", creditedAccNo=" + creditedAccNo + "]";
+		System.out.println("------------------------------------------------------------------------------------------------------");
+		return "\n"
+				+ "transcationid : \t" + transcationid + "\ntransactionAmount : \t" + transactionAmount
+				+ "\ndebitedAccNo : \t" + debitedAccNo + "\ncreditedAccNo : \t" + creditedAccNo + "\ntimeStamp : \t" + timeStamp+
+				"\n------------------------------------------------------------------------------------------------------"
+				;
 	}
+
+	
 	
 	
 	

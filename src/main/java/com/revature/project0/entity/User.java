@@ -25,13 +25,15 @@ public class User {
 	
 	// constructor for User repository
 	
-	public User(int id, String name, int accNo, int accBal) {
+	public User() {
 		super();
 		this.id = id;
 		this.name = name;
 		this.accNo = accNo;
 		this.accBal = accBal;
 	}
+
+	
 
 	public int getId() {
 		return id;
