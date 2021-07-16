@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,6 +126,51 @@ public class JdbcToTransactionRepository implements TransactionRepository {
 			}
 		}
 
+	}
+	
+	
+	@Override
+	public List<Transaction> selectByDate(Timestamp fromDate,Timestamp toDate) {
+		List<Transaction> list = new ArrayList<>();
+		
+		
+		try {
+			conn = DbConnectionFactory.getConnection();
+
+			String dateQuery = "SELECT * FROM `transactions` where dateOfTransaction between ? and current_timestamp";
+			
+			
+
+			PreparedStatement sbQ = conn.prepareStatement(dateQuery);
+			sbQ.setTimestamp(0, fromDate);
+			
+			ResultSet rs = sbQ.executeQuery();
+
+			while (rs.next()) {
+				Transaction ts1 = new Transaction();
+				ts1.setCreditedAccNo(rs.getInt("creditedAccNo"));
+				ts1.setDebitedAccNo(rs.getInt("debitedAccNo"));
+				ts1.setTransactionAmount(rs.getInt("transactionAmount"));
+				ts1.setTranscationid(rs.getInt("transactionId"));
+				ts1.setTimeStamp(rs.getTimestamp("dateOfTransaction"));
+				list.add(ts1);
+			}
+			
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return list;
+		
 	}
 
 }

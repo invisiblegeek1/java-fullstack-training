@@ -10,11 +10,11 @@ import java.util.Properties;
 
 public class DbConnectionFactory {
 
-//	private static Properties props = new Properties();
+	private static Properties props = new Properties();
 	
 //	static {
 //		try {
-//			FileInputStream fis = new FileInputStream("/resources/db.properties");
+//			FileInputStream fis = new FileInputStream("project0/resources/db.properties");
 //			props.load(fis);
 //			fis.close();
 //		}catch(FileNotFoundException e) {
@@ -37,6 +37,9 @@ public class DbConnectionFactory {
 	}
 	public static Connection getConnection() throws SQLException{
 		
+//		String url = props.getProperty("jdbc:mysql://localhost:3306/todoDB");
+//		String userName = props.getProperty("root");
+//		String password = props.getProperty("Moorthy45$");
 		String url = "jdbc:mysql://localhost:3306/project0";
 		String userName = "root";
 		String password = "Moorthy45$";

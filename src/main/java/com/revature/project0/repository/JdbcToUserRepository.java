@@ -101,7 +101,7 @@ public class JdbcToUserRepository implements UserRepository {
 
 			System.out.println("Account created succesfully");
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 
 		} finally {
