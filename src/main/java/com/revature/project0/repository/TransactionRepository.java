@@ -13,6 +13,6 @@ public interface TransactionRepository {
 	
 	public void updateAccount(int debitAccNo,int creditAccNo,int transferAmount);
 	
-	public List<Transaction> selectByDate(Timestamp fromDate,Timestamp toDate);
+	public List<Transaction> selectByDate(String fromDate,String toDate);
 
 }

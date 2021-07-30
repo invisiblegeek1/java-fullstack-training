@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mysql.cj.jdbc.JdbcPreparedStatement;
+import com.revature.project0.Exception.TransactionNotFoundException;
+import com.revature.project0.Exception.UserNotFoundException;
 import com.revature.project0.database.DbConnectionFactory;
 import com.revature.project0.repository.UserRepository;
 import com.revature.project0.entity.User;
@@ -40,8 +42,12 @@ public class JdbcToUserRepository implements UserRepository {
 				user.setId(rs.getInt("id"));
 				list.add(user);
 			}
+			if(list==null) {
+				
+				throw new UserNotFoundException("invalid data");
+			}
 
-		} catch (SQLException e) {
+		} catch (SQLException | UserNotFoundException e) {
 			e.printStackTrace();
 
 		} finally {

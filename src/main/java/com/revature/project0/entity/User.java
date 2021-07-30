@@ -1,5 +1,7 @@
 package com.revature.project0.entity;
 
+import java.util.List;
+
 /*
  * 
  * Table: user
@@ -71,6 +73,9 @@ public class User {
 	public String toString() {
 		return "User details : [id=" + id + ", name=" + name + ", accNo=" + accNo + ", accBal=" + accBal + "]";
 	}
+
+
+
 	
 	
 	

@@ -23,7 +23,7 @@ public class Transaction {
 	private int transactionAmount;
 	private int debitedAccNo;
 	private int creditedAccNo;
-	private Timestamp timeStamp;
+	private String timeStamp;
 	
 	// constructor for Transaction
 	
@@ -70,11 +70,11 @@ public class Transaction {
 		this.creditedAccNo = creditedAccNo;
 	}
 	
-	public Timestamp getTimeStamp() {
+	public String getTimeStamp() {
 		return timeStamp;
 	}
 
-	public void setTimeStamp(Timestamp timeStemp) {
+	public void setTimeStamp(String timeStemp) {
 		this.timeStamp = timeStemp;
 	}
 

@@ -3,8 +3,12 @@ package com.revature.project0;
 
 import java.util.Date;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -55,25 +59,16 @@ public class App
 	
 	public void viewTransactions(Scanner in)  {
 		JdbcToTransactionRepository transacationRepo= new JdbcToTransactionRepository();
-		System.out.println("Enter the from date ");
+		System.out.println("Enter the from date like yyyy-mm-dd ");
 	       String fromDate=in.nextLine();
-	       Date fromDateObject = null;
-		try {
-			fromDateObject = new SimpleDateFormat("dd-mm-yyyy").parse(fromDate);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	       System.out.println("Enter the to date ");
-	       String toDate=in.nextLine    ();
-	       Date toDateObject = null;
-		try {
-			toDateObject = new SimpleDateFormat("dd-mm-yyyy").parse(toDate);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	       transacationRepo.selectByDate((Timestamp)fromDateObject, (Timestamp)toDateObject);
+	       System.out.println("Enter the to date like yyyy-mm-dd ");
+	       String toDate=in.nextLine();
+	       List<Transaction> ts=transacationRepo.selectByDate(fromDate,toDate);
+	       ts.forEach(System.out::println);
+	       
+	        
+	   
+	       
 	       
 	       
 		
@@ -86,8 +81,8 @@ public class App
     	App appObj = new App();
     	Scanner in = new Scanner(System.in);
     	//appObj.accountCreation( in );
-    	//appObj.doTranscation(in);
-   	appObj.viewTransactions(in);
+    	appObj.doTranscation(in);
+//    	appObj.viewTransactions(in);
     	
     	
     	System.out.println("---------------------------------Welcome  to  InstaPay----------------------------------\n ");
