@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import com.revature.project0.Exception.DateNotFoundException;
 import com.revature.project0.Exception.TransactionNotFoundException;
@@ -18,10 +21,11 @@ import com.revature.project0.entity.User;
 public class JdbcToTransactionRepository implements TransactionRepository {
 
 	Connection conn;
+	public static Logger loggers = Logger.getLogger("app");
 
 	@Override
 	public List<Transaction> transferMoney(int debitAccNo, int creditAccNo, int transactAmount) {
-		
+
 		LocalDate today = LocalDate.now();
 		String date = today.toString();
 
@@ -31,6 +35,7 @@ public class JdbcToTransactionRepository implements TransactionRepository {
 			conn = DbConnectionFactory.getConnection();
 
 			String addQuery = "insert into `transactions`(transactionAmount,debitedAccNo,creditedAccNo,dateOfTransaction) values(?,?,?,?)";
+			loggers.info("Transaction initiated");
 
 			PreparedStatement ps2 = conn.prepareStatement(addQuery);
 			ps2.setInt(1, transactAmount);
@@ -41,8 +46,10 @@ public class JdbcToTransactionRepository implements TransactionRepository {
 			this.updateAccount(debitAccNo, creditAccNo, transactAmount);
 
 			ps2.executeUpdate();
+			
+			loggers.info("Transaction completed succesfully");
 
-			System.out.println("transaction completed");
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -68,7 +75,7 @@ public class JdbcToTransactionRepository implements TransactionRepository {
 		try {
 			conn = DbConnectionFactory.getConnection();
 
-			String selectQuery = "select * from `transactions` where debitedAccNo=?";
+			String selectQuery = "select * from `transactions` where debitedAccNo=? order by transactionId desc limit 1";
 
 			PreparedStatement ps2 = conn.prepareStatement(selectQuery);
 			ps2.setInt(1, debitAccNo);
@@ -84,8 +91,8 @@ public class JdbcToTransactionRepository implements TransactionRepository {
 				ts1.setTimeStamp(rs.getString("dateOfTransaction"));
 				list.add(ts1);
 			}
-			if(list==null) {
-				
+			if (list == null) {
+
 				throw new TransactionNotFoundException("invalid Acc no");
 			}
 
@@ -123,7 +130,8 @@ public class JdbcToTransactionRepository implements TransactionRepository {
 			crQ.setInt(1, transferAmount);
 			crQ.setInt(2, creditAccNo);
 			crQ.executeUpdate();
-			System.out.println("The amount of " + transferAmount + " has credited into " + creditAccNo + " successfully");
+			System.out
+					.println("The amount of " + transferAmount + " has credited into " + creditAccNo + " successfully");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -138,26 +146,20 @@ public class JdbcToTransactionRepository implements TransactionRepository {
 		}
 
 	}
-	
-	
+
 	@Override
-	public List<Transaction> selectByDate(String fromDate,String toDate) {
+	public List<Transaction> selectByDate(String fromDate, String toDate) {
 		List<Transaction> list = new ArrayList<>();
-		
-		
-		
-		
+
 		try {
 			conn = DbConnectionFactory.getConnection();
 
 			String dateQuery = "SELECT * FROM `transactions` where dateOfTransaction between ? and ?";
-			
-			
 
 			PreparedStatement sbQ = conn.prepareStatement(dateQuery);
 			sbQ.setString(1, fromDate);
 			sbQ.setString(2, toDate);
-			
+
 			ResultSet rs = sbQ.executeQuery();
 
 			while (rs.next()) {
@@ -169,11 +171,10 @@ public class JdbcToTransactionRepository implements TransactionRepository {
 				ts1.setTimeStamp(rs.getString("dateOfTransaction"));
 				list.add(ts1);
 			}
-			if(list==null) {
-				
+			if (list == null) {
+
 				throw new DateNotFoundException("invalid date");
 			}
-			
 
 		} catch (SQLException | DateNotFoundException e) {
 			e.printStackTrace();
@@ -186,9 +187,54 @@ public class JdbcToTransactionRepository implements TransactionRepository {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return list;
+
+	}
+
+	@Override
+	public List<Transaction> listTopTenTransactions() {
 		
+		List<Transaction> list = new ArrayList<>();
+
+		try {
+			conn = DbConnectionFactory.getConnection();
+
+			String selectQuery = "select * from `transactions`  order by transactionAmount desc limit 10";
+
+			Statement ps2 = conn.createStatement();
+			
+			
+
+			ResultSet rs = ps2.executeQuery(selectQuery);
+
+			while (rs.next()) {
+				Transaction ts1 = new Transaction();
+				ts1.setCreditedAccNo(rs.getInt("creditedAccNo"));
+				ts1.setDebitedAccNo(rs.getInt("debitedAccNo"));
+				ts1.setTransactionAmount(rs.getInt("transactionAmount"));
+				ts1.setTranscationid(rs.getInt("transactionId"));
+				ts1.setTimeStamp(rs.getString("dateOfTransaction"));
+				list.add(ts1);
+			}
+			if (list == null) {
+
+				throw new TransactionNotFoundException("invalid Acc no");
+			}
+
+		} catch (SQLException | TransactionNotFoundException e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return list;
 	}
 
 }

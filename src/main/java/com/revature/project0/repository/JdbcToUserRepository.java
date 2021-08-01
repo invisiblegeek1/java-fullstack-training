@@ -1,6 +1,6 @@
 package com.revature.project0.repository;
 
-import java.sql.CallableStatement;
+
 import java.sql.Connection;
 
 import java.sql.PreparedStatement;
@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import com.mysql.cj.jdbc.JdbcPreparedStatement;
 import com.revature.project0.Exception.TransactionNotFoundException;
@@ -19,6 +21,7 @@ import com.revature.project0.entity.User;
 
 public class JdbcToUserRepository implements UserRepository {
 	Connection conn;
+	public static Logger loggers = Logger.getLogger("app");
 
 	@Override
 	public List<User> findUser(String column, int value) {
@@ -29,8 +32,7 @@ public class JdbcToUserRepository implements UserRepository {
 
 			String findQuery = "select * from `users` where " + column + "=" + value;
 			PreparedStatement ps = conn.prepareStatement(findQuery);
-//			ps.setString(1, column);
-//			ps.setInt(1, value);
+
 
 			ResultSet rs = ps.executeQuery();
 
@@ -45,6 +47,7 @@ public class JdbcToUserRepository implements UserRepository {
 			if(list==null) {
 				
 				throw new UserNotFoundException("invalid data");
+				
 			}
 
 		} catch (SQLException | UserNotFoundException e) {
@@ -61,7 +64,7 @@ public class JdbcToUserRepository implements UserRepository {
 		return list;
 
 	}
-
+	// User has selected based on mobile number
 	@Override
 	public List<User> findByMobile(int mobile) {
 
@@ -69,7 +72,7 @@ public class JdbcToUserRepository implements UserRepository {
 		 return findUser("mobile", mobile);
 
 	}
-
+	// User has selected based on account number
 	@Override
 	public List<User> findByAccNo(int accNo) {
 
@@ -80,17 +83,23 @@ public class JdbcToUserRepository implements UserRepository {
 
 	@Override
 	public List<User> createUser(String username, int mobile) {
+		
 
 		
 		try {
 			conn = DbConnectionFactory.getConnection();
+			
+			String IFSC_CODE="6023";
+			String IFSCWithAccNo=IFSC_CODE+Integer.toString(mobile);
+			
+			
 
-			int accNo = 200 * mobile;
+			int accNo = Integer.parseInt(IFSCWithAccNo);
 			int accBal = 5000;
 			
 			
 
-//			CallableStatement nsf = conn.prepareCall("{call newuser_procedure(?,?,?,?)}");
+
 			
 			String addQuery = "insert into `users`(username,accNo,accBal,mobile) values(?,?,?,?)";
 
@@ -104,7 +113,7 @@ public class JdbcToUserRepository implements UserRepository {
 			nsf.execute();
 
 			
-
+			loggers.info("Account created succesfully");
 			System.out.println("Account created succesfully");
 
 		} catch (Exception e) {
@@ -122,4 +131,6 @@ public class JdbcToUserRepository implements UserRepository {
 		return findByMobile(mobile);
 
 	}
+
+	
 }

@@ -1,6 +1,6 @@
 package com.revature.project0.entity;
 
-import java.sql.Timestamp;
+
 
 /*
  * Table: transactions
@@ -18,24 +18,22 @@ dateOfTransaction times
  */
 
 public class Transaction {
-	
+
 	private int transcationid;
 	private int transactionAmount;
 	private int debitedAccNo;
 	private int creditedAccNo;
 	private String timeStamp;
-	
-	// constructor for Transaction
-	
-	
 
-	public  Transaction() {
+	// constructor for Transaction
+
+	public Transaction() {
 		super();
 		this.transcationid = transcationid;
 		this.transactionAmount = transactionAmount;
 		this.debitedAccNo = debitedAccNo;
 		this.creditedAccNo = creditedAccNo;
-		this.timeStamp=timeStamp;
+		this.timeStamp = timeStamp;
 	}
 
 	public int getTranscationid() {
@@ -69,7 +67,7 @@ public class Transaction {
 	public void setCreditedAccNo(int creditedAccNo) {
 		this.creditedAccNo = creditedAccNo;
 	}
-	
+
 	public String getTimeStamp() {
 		return timeStamp;
 	}
@@ -80,23 +78,12 @@ public class Transaction {
 
 	@Override
 	public String toString() {
-		System.out.println("------------------------------------------------------------------------------------------------------");
-		return "\n"
-				+ "transcationid : \t" + transcationid + "\ntransactionAmount : \t" + transactionAmount
-				+ "\ndebitedAccNo : \t" + debitedAccNo + "\ncreditedAccNo : \t" + creditedAccNo + "\ntimeStamp : \t" + timeStamp+
-				"\n------------------------------------------------------------------------------------------------------"
-				;
+		System.out.println(
+				"------------------------------------------------------------------------------------------------------");
+		return "\n" + "transcationid : \t" + transcationid + "\ntransactionAmount : \t" + transactionAmount
+				+ "\ndebitedAccNo : \t" + debitedAccNo + "\ncreditedAccNo : \t" + creditedAccNo + "\ntimeStamp : \t"
+				+ timeStamp
+				+ "\n------------------------------------------------------------------------------------------------------";
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }
